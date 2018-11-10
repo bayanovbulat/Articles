@@ -1,0 +1,18 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+	<HEAD>
+		<TITLE>Загрузка</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+		<div id = "delete">
+		<a href="{% url 'logout' %}">Выход</a><ul></ul><a href="{% url 'articles' %}">Назад к списку статей</a>
+		<li>{{ data_name }}</li>
+		<form action = "" enctype="multipart/form-data" method='post'>{% csrf_token %}
+			<p>Файл: </p><input type = "file" name = "file">
+			<input type = "submit" value = "Загрузить">
+		</form>
+		</div>
+	</BODY>
+</HTML>

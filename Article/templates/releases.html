@@ -1,0 +1,109 @@
+{% load staticfiles %}
+<HTML>
+	<HEAD>
+		<TITLE>Выпуски</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+	
+	<div id = "header">
+		<h1>Список выпусков</h1> {% if usergroup != 'Guests' %}<a href="{% url 'logout' %}">Выход</a>{% else %}<a href="{% url 'login' %}">Вход</a>{% endif %}
+		<p>{% if usergroup == 'Editors' %}<a href="{% url 'addrelease' %}">Добавить выпуск</a>{% endif %}</p>
+		<p><a href="{% url 'articles' %}">Перейти в список статей</a></p>
+	</div>
+	{% if usergroup == 'Editors' %}
+		<div id = "master">
+		<table>
+			{% for release in Releases %} <!-- Работаем с классом-контроллером ListView -->
+				{% if forloop.first %}
+				<tr>
+						<th>ISSN</th>
+						<th>Название журнала</th>
+						<th>ФИО редактора</th>
+						<th>Название издательства</th>
+						<th>Номер выпуска</th>
+					</tr>
+				{% endif %}
+				<tr>
+					{% if release.release_date != None %}<td><a href="{% url 'release' index=release.id %}">{{ release.ISSN|truncatechars:50 }}</a></td>{% else %}<td><a href="{% url 'release' index=release.id %}">Нет в публикации</a></td>{% endif %}
+					<td class = "centered">{{ release.name_magazine }}</td>
+					<td class = "centered">{{ release.name_editor }}</td>
+					<td class = "centered">{{ release.name_publisher }}</td>
+					<td class = "centered">{{ release.number_release }}</td>
+				</tr>
+			{% empty %} Список выпусков пуст
+			{% endfor %}
+		</table>
+		</div>
+		<ul></ul>
+		<div id = "main">
+		<table>
+			{% for article in Articles %} <!-- Работаем с классом-контроллером ListView -->
+				{% if forloop.first %}
+					<tr>
+						<th>Название статьи</th>
+						<th>Дата издания</th>
+						<th>DOI</th>
+						<th>Цена статьи</th>
+						<th>Номер выпуска</th>
+						<th>Страницы в журнале</th>
+						<th>УДК</th>
+						<th>Название журнала</th>
+						<th>Название издательства</th>
+						<th>ISSN издания</th>
+						<th>Язык</th>
+						<th>Аннотация</th>
+						<th>Ключевые слова</th>
+						<th>текст статьи</th>
+					</tr>
+				{% endif %}
+				<tr>
+					<td>{{ article.name|truncatechars:50 }}<ul></ul><a href="{% url 'articleeditor' index=article.id %}">Добавить в выпуск или изменить</a</td>
+					<td class = "centered"> - </td>
+					<td class = "centered"> - </td>
+					<td class = "centered"> - </td>
+					<td class = "centered"> - </td>
+					<td class = "centered"> - </td>
+					<td class = "centered">{{ article.UDC }}</td>
+					<td class = "centered">{{ article.name_magazine }}</td>
+					<td class = "centered"> - </td>
+					<td class = "centered"> - </td>
+					<td class = "centered">{{ article.language }}</td>
+					<td class = "centered">{{ article.description|truncatechars:50 }}</td>
+					<td class = "centered">{% for keyword in Keywords %}{% if keyword.article == article %}{{ keyword.name|truncatechars:50 }}<br></br>{% endif %}{% empty %} Список ключевых слов пуст{% endfor %}</td>
+					<td class = "centered">{{ article.text|truncatechars:50 }}</td>
+				</tr>
+			{% empty %} Список статей пуст
+			{% endfor %}
+		</table>
+		</div>
+	{% else %}
+		<div id = "master">
+		<table>
+			{% for release in Releases %} <!-- Работаем с классом-контроллером ListView -->
+				{% if release.release_date != None %}
+					{% if forloop.first %}
+					<tr>
+							<th>ISSN</th>
+							<th>Название журнала</th>
+							<th>ФИО редактора</th>
+							<th>Название издательства</th>
+							<th>Номер выпуска</th>
+						</tr>
+					{% endif %}
+					<tr>
+						<td><a href="{% url 'release' index=release.id %}">{{ release.ISSN|truncatechars:50 }}</a></td>
+						<td class = "centered">{{ release.name_magazine }}</td>
+						<td class = "centered">{{ release.name_editor }}</td>
+						<td class = "centered">{{ release.name_publisher }}</td>
+						<td class = "centered">{{ release.number_release }}</td>
+					</tr>
+				{% endif %}
+			{% empty %} Список выпусков пуст
+			{% endfor %}
+		</table>
+		</div>
+	{% endif %}
+	</BODY>
+</HTML>

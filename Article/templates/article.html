@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+	<HEAD>
+		<TITLE>{{ article.name }}</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+		<div id="information">
+		<ul></ul>
+			<table>
+			<tr><td>Название статьи</td>
+			<td>{{ article.name }}</td></tr>
+			{% if article.release_date != None %}<tr><td>Дата выхода</td>
+			<td>{{ article.release_date }}</td></tr>{% endif %}
+			{% if article.release_date != None %}<tr><td>DOI</td>
+			<td>{{ article.DOI }}</td></tr>{% endif %}
+			<tr><td>Авторы</td>
+			<td>{% for author in Authors %}{{ author.name }}<br></br>
+			{% empty %} Список авторов пуст{% endfor %}</td></tr>
+			{% if article.release_date != None %}<tr><td>Стоимость</td>
+			<td>{{ article.cost }}</td></tr>{% endif %}
+			{% if article.release_date != None %}<tr><td>Номер выпуска</td>
+			<td>{{ article.number_release }}</td></tr>{% endif %}
+			<tr><td>УДК</td>
+			<td>{{ article.UDC }}</td></tr>
+			{% if article.release_date != None %}<tr><td>ISSN</td>
+			<td>{{ article.ISSN }}</td></tr>{% endif %}
+			<tr><td>Язык</td>
+			<td>{{ article.language }}</td></tr>
+			<tr><td>Аннотация</td>
+			<td>{{ article.description }}</td></tr>
+			<tr><td>Ключевые слова</td>
+			<td>{% for keyword in Keywords %}{% if keyword.article == article %}{{ keyword.name }}<br></br>{% endif %}
+			{% empty %} Список ключевых слов пуст{% endfor %}</td></tr>
+			<tr><td>Текст статьи</td>
+			<td>{{ article.text }}</td></tr>
+			</table>
+		</div>
+	</BODY>
+</HTML>

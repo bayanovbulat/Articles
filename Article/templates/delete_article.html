@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+	<HEAD>
+		<TITLE>Delete</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+		<div id = "delete">
+		<a href="{% url 'logout' %}">Выход</a><ul></ul><a href="{% url 'articles' %}">Назад к списку статей</a>
+		<li>Название статьи: {{ article.name }}</li>
+		<form action="" method="post">{% csrf_token %}
+			<input type="submit" value="Удалить">
+		</form>
+		</div>
+	</BODY>
+</HTML>

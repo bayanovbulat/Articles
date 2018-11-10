@@ -1,0 +1,18 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+	<HEAD>
+		<TITLE>Изменение</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+	<div id = "edit">
+	{% if usergroup == 'Authors' or usergroup == 'Editors' %}<a href="{% url 'logout' %}">Выход</a> <a href="{% url 'articles' %}">Назад к списку статей</a>{% endif %}
+	{% if usergroup == 'Editors' or usergroup == 'Editors' %}<a href="{% url 'logout' %}">Выход</a> <a href="{% url 'releases' %}">Назад к списку выпусков</a>{% endif %}
+		<form action="" method="post">{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Сохранить">
+		</form>
+	</div>
+	</BODY>
+</HTML>

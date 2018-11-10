@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<HTML>
+	<HEAD>
+		<TITLE>Статьи</TITLE>
+		<meta http-equiv = "Content-Type" content = "text/html; charset = utf-8">
+		<link type = "text/css" href = "{% static "style.css" %}" rel = "stylesheet"/>
+	</HEAD>
+	<BODY>
+	<div id = "header">
+		<h1>Список статей</h1> {% if usergroup != 'Guests' %}<a href="{% url 'logout' %}">Выход</a>{% else %}<a href="{% url 'login' %}">Вход</a>{% endif %}
+		{% if usergroup == 'Authors' %}<p><a href="{% url 'add' %}">Добавить статью</a></p>{% endif %}
+		{% if usergroup == 'Admins' %}<p><a href="{% url 'upload' %}">Загрузить пользователей в БД</a></p>{% endif %}
+		<p><a href="{% url 'releases' %}">Перейти в выпуски журналов</a></p>
+	</div>
+	<div id = "main">
+	<table>
+		{% for article in Articles %} <!-- Работаем с классом-контроллером ListView -->
+			{% if forloop.first %}
+				<tr>
+					<th>Название статьи</th>
+					<th>Год издания</th>
+					<th>DOI</th>
+					<th>Цена статьи</th>
+					<th>Номер выпуска</th>
+					<th>УДК</th>
+					<th>Название журнала</th>
+					<th>Название издательства</th>
+					<th>ISSN издания</th>
+					<th>Язык</th>
+					<th>Аннотация</th>
+					<th>Ключевые слова</th>
+					<th>текст статьи</th>
+					{% if usergroup == 'Authors' %}{% if article.release_date == None and article.release == None %}<th>Удалить</th>{% endif %}{% endif %}
+				</tr>
+			{% endif %}
+			<tr>
+				<td><a href="{% url 'article' id=article.id %}">{{ article.name|truncatechars:50 }}</a></td>
+				{% if article.release_date != None %}<td class = "centered">{{ article.release_date }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				{% if article.release_date != None %}<td class = "centered">{{ article.DOI }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				{% if article.release_date != None and article.cost != None %}<td class = "centered">{{ article.cost }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				{% if article.release_date != None %}<td class = "centered">{{ article.number_release }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				<td class = "centered">{{ article.UDC }}</td>
+				<td class = "centered">{{ article.name_magazine }}</td>
+				{% if article.release_date != None %}<td class = "centered">{{ article.name_publisher }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				{% if article.release_date != None %}<td class = "centered">{{ article.ISSN }}</td>
+				{% else %} <td class = "centered"> - </td> {% endif %}
+				<td class = "centered">{{ article.language }}</td>
+				<td class = "centered">{{ article.description|truncatechars:50 }}{% if usergroup == 'Authors' %}{% if article.release_date == None and article.release == None %}<h4><a href="{% url 'edit' id=article.id %}">Изменить</a></h4>{% endif %}{% endif %}</td>
+				<td class = "centered">{% for keyword in Keywords %}{% if keyword.article == article %}{{ keyword.name }}<br></br>{% endif %}{% empty %} Список ключевых слов пуст{% endfor %}</td>
+				<td class = "centered">{{ article.text|truncatechars:50 }}</td>
+				{% if usergroup == 'Authors' %}{% if article.release_date == None and article.release == None %}<td class = "centered"><h4><a href="{% url 'delete' id=article.id %}">Удалить</a></h4></td>{% endif %}{% endif %}
+			</tr>
+		{% empty %} Список статей пуст
+		{% endfor %}
+	</table>
+	</div>
+	</BODY>
+</HTML>
